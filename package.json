@@ -1,0 +1,47 @@
+{
+  "name": "react-native-dnd-status",
+  "version": "0.0.1",
+  "description": "Detect and listen to Do Not Disturb (DND) mode on Android in React Native. Check if DND is active, subscribe to changes, and verify if your app’s notification channels are allowed to bypass DND. iOS is stubbed (no public DND API).",
+  "license": "MIT",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index.tsx",
+  "files": [
+    "lib/",
+    "src/",
+    "android/",
+    "ios/",
+    "react-native-dnd-status.podspec",
+    "LICENSE",
+    "README.md",
+    "react-native.config.js"
+  ],
+  "scripts": {
+    "build": "bob build",
+    "clean": "bob clean",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "yarn build"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-native": ">=0.72.0"
+  },
+  "devDependencies": {
+    "react-native-builder-bob": "^0.23.2",
+    "typescript": "^5.4.0",
+    "@types/react": "^18.2.61",
+    "@types/react-native": "^0.73.0",
+    "react": "19.1.0",
+    "react-native": "0.81.1",
+    "@react-native/babel-preset": "0.81.1"
+  },
+  "codegenConfig": {
+    "name": "DndStatus",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.dndstatus"
+    }
+  }
+}
