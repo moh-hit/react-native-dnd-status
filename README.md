@@ -1,7 +1,3 @@
-Got it ✅ — here’s a **final README.md** for your package, now with a nice set of badges at the top (npm version, license, React Native compatibility, and TypeScript ready).
-
----
-
 # react-native-dnd-status
 
 [![npm version](https://img.shields.io/npm/v/react-native-dnd-status.svg)](https://www.npmjs.com/package/react-native-dnd-status)
@@ -160,7 +156,6 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 ```ts
 import { canNotifyDuringDnd } from "react-native-dnd-status"
-
 ;(async () => {
   const allowed = await canNotifyDuringDnd("alerts")
   if (!allowed) {
