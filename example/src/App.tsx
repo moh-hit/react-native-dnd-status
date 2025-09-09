@@ -19,6 +19,10 @@ import {
   addDndListener,
   type DndChangedPayload,
 } from "react-native-dnd-status"
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context"
 
 interface StatusCardProps {
   title: string
@@ -60,6 +64,7 @@ export default function App() {
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [listenerActive, setListenerActive] = React.useState<boolean>(false)
 
+  const { top } = useSafeAreaInsets()
   const listenerRef = React.useRef<{ remove: () => void } | null>(null)
 
   const getFilterName = (filter: number): string => {
@@ -149,7 +154,7 @@ export default function App() {
 
   if (Platform.OS !== "android") {
     return (
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={[styles.scrollView, { paddingTop: top }]}>
         <View style={styles.header}>
           <Text style={styles.title}>🔕 DND Status Demo</Text>
           <Text style={styles.subtitle}>iOS Not Supported</Text>
@@ -160,88 +165,86 @@ export default function App() {
             does not provide public APIs for DND status detection.
           </Text>
         </View>
-      </SafeAreaView>
+      </ScrollView>
     )
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.header}>
-          <Text style={styles.title}>🔕 DND Status Demo</Text>
-          <Text style={styles.subtitle}>Monitor Do Not Disturb Settings</Text>
-        </View>
+    <ScrollView style={[styles.scrollView, { paddingTop: top }]}>
+      <View style={styles.header}>
+        <Text style={styles.title}>🔕 DND Status Demo</Text>
+        <Text style={styles.subtitle}>Monitor Do Not Disturb Settings</Text>
+      </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Current Status</Text>
-          <StatusCard
-            title="Do Not Disturb"
-            value={dndEnabled}
-            description="Whether DND mode is currently active"
-            isLoading={isLoading}
-          />
-          <StatusCard
-            title="Interruption Filter"
-            value={getFilterName(interruptionFilter)}
-            description="Current notification filtering level"
-            isLoading={isLoading}
-          />
-        </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Current Status</Text>
+        <StatusCard
+          title="Do Not Disturb"
+          value={dndEnabled}
+          description="Whether DND mode is currently active"
+          isLoading={isLoading}
+        />
+        <StatusCard
+          title="Interruption Filter"
+          value={getFilterName(interruptionFilter)}
+          description="Current notification filtering level"
+          isLoading={isLoading}
+        />
+      </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Permissions & Access</Text>
-          <StatusCard
-            title="Notifications Enabled"
-            value={notificationsEnabled}
-            description="App can show notifications"
-            isLoading={isLoading}
-          />
-          <StatusCard
-            title="Post Notifications Permission"
-            value={hasPostPermission}
-            description="Android 13+ notification permission granted"
-            isLoading={isLoading}
-          />
-          <StatusCard
-            title="Policy Access Granted"
-            value={hasPolicyAccess}
-            description="Can read DND policy settings"
-            isLoading={isLoading}
-          />
-          <StatusCard
-            title="Can Bypass DND"
-            value={canBypassDnd}
-            description="Default channel can bypass DND"
-            isLoading={isLoading}
-          />
-        </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Permissions & Access</Text>
+        <StatusCard
+          title="Notifications Enabled"
+          value={notificationsEnabled}
+          description="App can show notifications"
+          isLoading={isLoading}
+        />
+        <StatusCard
+          title="Post Notifications Permission"
+          value={hasPostPermission}
+          description="Android 13+ notification permission granted"
+          isLoading={isLoading}
+        />
+        <StatusCard
+          title="Policy Access Granted"
+          value={hasPolicyAccess}
+          description="Can read DND policy settings"
+          isLoading={isLoading}
+        />
+        <StatusCard
+          title="Can Bypass DND"
+          value={canBypassDnd}
+          description="Default channel can bypass DND"
+          isLoading={isLoading}
+        />
+      </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Controls</Text>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              { backgroundColor: listenerActive ? "#FF6B6B" : "#4ECDC4" },
-            ]}
-            onPress={toggleListener}
-          >
-            <Text style={styles.buttonText}>
-              {listenerActive ? "Stop Listening" : "Start Listening"}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.refreshButton} onPress={loadAllData}>
-            <Text style={styles.refreshButtonText}>🔄 Refresh Status</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Toggle your device's Do Not Disturb mode to see real-time updates
-            when listener is active.
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Controls</Text>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            { backgroundColor: listenerActive ? "#FF6B6B" : "#4ECDC4" },
+          ]}
+          onPress={toggleListener}
+        >
+          <Text style={styles.buttonText}>
+            {listenerActive ? "Stop Listening" : "Start Listening"}
           </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.refreshButton} onPress={loadAllData}>
+          <Text style={styles.refreshButtonText}>🔄 Refresh Status</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Toggle your device's Do Not Disturb mode to see real-time updates when
+          listener is active.
+        </Text>
+      </View>
+    </ScrollView>
   )
 }
 

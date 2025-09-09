@@ -4,7 +4,11 @@ import NativeDndStatus, { type DndChangedPayload } from "./NativeDndStatus"
 export type { DndChangedPayload }
 
 const emitter =
-  Platform.OS === "android" ? new NativeEventEmitter(NativeDndStatus) : null
+  Platform.OS === "android" &&
+  NativeDndStatus?.addListener &&
+  NativeDndStatus?.removeListeners
+    ? new NativeEventEmitter(NativeDndStatus)
+    : null
 
 export function addListener(
   eventName: string,
