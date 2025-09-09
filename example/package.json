@@ -1,6 +1,6 @@
 {
   "name": "react-native-dnd-status-example",
-  "version": "0.0.2",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -29,8 +29,5 @@
     "@types/react": "^19.1.0",
     "react-native-builder-bob": "^0.40.13",
     "react-native-monorepo-config": "^0.1.9"
-  },
-  "engines": {
-    "node": ">=20"
   }
 }
