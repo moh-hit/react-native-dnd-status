@@ -1,0 +1,60 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      packages: write # allow GITHUB_TOKEN to publish packages
+
+    steps:
+
+      - name: Checkout Project
+        uses: actions/checkout@v3
+
+      - name: Install Node.js v20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      
+      - name: Expose yarn config as "$GITHUB_OUTPUT"
+        id: yarn-config
+        shell: bash
+        run: |
+         echo "CACHE_FOLDER=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - name: Restore yarn cache
+        uses: actions/cache@v3
+        id: yarn-download-cache
+        with:
+          path: ${{ steps.yarn-config.outputs.CACHE_FOLDER}}
+          key: yarn-download-cache-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            yarn-download-cache-
+        
+      - name: Restore yarn install state
+        id: yarn-install-state-cache
+        uses: actions/cache@v3
+        with:
+          path: .yarn/ci-cache/
+          key: ${{ runner.os }}-yarn-install-state-cache-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+        
+      - name: Install dependencies
+        shell: bash
+        run: |
+            yarn install --immutable --inline-builds
+
+      - name: Build
+        run: yarn build
+      
+      - name: Publish to NPM Registry
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_AUTH_TOKEN }}
+          access: public
