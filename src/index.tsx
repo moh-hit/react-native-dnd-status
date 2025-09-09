@@ -3,12 +3,14 @@ import NativeDndStatus, { type DndChangedPayload } from "./NativeDndStatus"
 
 export type { DndChangedPayload }
 
-const emitter =
+const hasRequiredNativeEmitterMethods =
   Platform.OS === "android" &&
-  NativeDndStatus?.addListener &&
-  NativeDndStatus?.removeListeners
-    ? new NativeEventEmitter(NativeDndStatus)
-    : null
+  typeof (NativeDndStatus as any)?.addListener === "function" &&
+  typeof (NativeDndStatus as any)?.removeListeners === "function"
+
+const emitter = hasRequiredNativeEmitterMethods
+  ? new NativeEventEmitter(NativeDndStatus as any)
+  : null
 
 export function addListener(
   eventName: string,
@@ -16,15 +18,17 @@ export function addListener(
 ): {
   remove: () => void
 } {
-  if (Platform.OS !== "android") return { remove: () => {} }
+  if (!hasRequiredNativeEmitterMethods || !emitter) {
+    return { remove: () => {} }
+  }
 
-  NativeDndStatus.addListener(eventName)
-  const sub: EmitterSubscription = emitter!.addListener(eventName, callback)
+  ;(NativeDndStatus as any).addListener(eventName)
+  const sub: EmitterSubscription = emitter.addListener(eventName, callback)
 
   return {
     remove: () => {
       sub.remove()
-      NativeDndStatus.removeListeners(1)
+      ;(NativeDndStatus as any).removeListeners(1)
     },
   }
 }
