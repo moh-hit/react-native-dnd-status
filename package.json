@@ -1,7 +1,8 @@
 {
   "name": "react-native-dnd-status",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Detect and listen to Do Not Disturb (DND) mode on Android in React Native. Check if DND is active, subscribe to changes, and verify if your app’s notification channels are allowed to bypass DND. iOS is stubbed (no public DND API).",
+  "author": "Mohit Kumar <moh.hit1012@gmail.com>",
   "license": "MIT",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -43,5 +44,16 @@
     "android": {
       "javaPackageName": "com.dndstatus"
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moh-hit/react-native-dnd-status.git"
+  },
+  "keywords": [
+    "react-native-dnd-status", "dnd", "do-not-disturb", "android"
+  ],
+  "bugs": {
+    "url": "https://github.com/moh-hit/react-native-dnd-status/issues"
+  },
+  "homepage": "https://github.com/moh-hit/react-native-dnd-status/"
 }
